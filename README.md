@@ -1,4 +1,4 @@
-# CSE13S-01 Fall 2023
+# CSE13S-02 Winter 2024
 
 ## Assignment Directories
 
@@ -6,7 +6,7 @@ All work for an assignment must go into that assignment's corresponding folder. 
 grading, only the contents of that folder will be checked, and anything outside of it
 will not be graded. 
 
-Not all of the assignment directories may be used (e.g. we may not have an assignment 7).
+Not all of the assignment directories may be used (e.g. we may not have an assignment 8).
 It's okay to have an empty directory for assignments that haven't been assigned yet. 
 
 ## Additional Files
