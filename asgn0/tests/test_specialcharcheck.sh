@@ -2,7 +2,7 @@
 echo BAD INPUT > expected.txt
 
 # Runs the program
-./calc 3 a > output.txt 
+./calc 3 > output.txt 
 
 # Ensures exit code is Zero
 if [ $? -eq 0 ]; then
@@ -15,14 +15,14 @@ fi
 # Ensures differences *are* found
 diff expected.txt output.txt
 if [ $? -ne 0 ]; then
-    echo "somehow, a non integer in the second slot is accepted!"
+    echo "special character in second slot accepeted!!"
     rm output.txt
     rm expected.txt
     exit 1
 fi
 
 # Prints a message on success
-echo "Test does not accept characters in the second slot: FAIL"
+echo "Test does not accept special characters in second slot : FAIL""
 
 # Cleans up files created
 rm output.txt
