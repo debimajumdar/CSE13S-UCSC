@@ -1,6 +1,6 @@
 #!/bin/bash
-VERBOSE=0
-EXACTERR=0
+VERBOSE=1
+EXACTERR=1
 COLOR=1
 cat_folder=compiled_cats_arm
 if [ $(uname -m) == "x86_64" ]; then
