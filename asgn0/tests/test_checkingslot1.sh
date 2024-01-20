@@ -6,7 +6,7 @@ echo BAD INPUT > expected.txt
 
 # Ensures exit code is Zero
 if [ $? -eq 0 ]; then
-    echo "failed wrong input" $?
+    echo "failed bad input" $?
     rm expected.txt
     rm output.txt
     exit 1
@@ -15,14 +15,14 @@ fi
 # Ensures differences *are* found
 diff expected.txt output.txt
 if [ $? -ne 0 ]; then
-    echo "somehow, a non integer in the second slot is accepted!"
+    echo "somehow, a non integer in the first  slot is accepted!"
     rm output.txt
     rm expected.txt
     exit 1
 fi
 
 # Prints a message on success
-echo "Test does not accept characters in the second slot: FAIL"
+echo "Test does not accept characters in the first slot: FAIL"
 
 # Cleans up files created
 rm output.txt

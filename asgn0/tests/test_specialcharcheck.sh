@@ -2,11 +2,11 @@
 echo BAD INPUT > expected.txt
 
 # Runs the program
-./calc 3 > output.txt 
+./calc 3 @ > output.txt 
 
 # Ensures exit code is Zero
 if [ $? -eq 0 ]; then
-    echo "failed wrong input" $?
+    echo "failed bad input" $?
     rm expected.txt
     rm output.txt
     exit 1

@@ -1,8 +1,8 @@
 # Creates the example output
-echo 1234 > expected.txt
+echo 1022 > expected.txt
 
 # Runs the program
-./calc 617 617 > output.txt 
+./calc 511 511 > output.txt 
 
 # Ensures exit code is Zero
 if [ $? -ne 0 ]; then
@@ -15,14 +15,14 @@ fi
 # Ensures differences *are* found
 diff output.txt expected.txt
 if [ $? -ne 0 ]; then
-    echo "Somehow, 617+617 is not equal to 1234!!"
+    echo "Somehow, 511+511 is not equal to 1022!!"
     rm output.txt
     rm expected.txt
     exit 1
 fi
 
 # Prints a message on success
-echo "617+617 = 1234: PASS"
+echo "511+511 = 1022: PASS"
 
 # Cleans up files created
 rm output.txt

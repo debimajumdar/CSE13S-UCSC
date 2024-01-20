@@ -2,7 +2,7 @@
 echo BAD INPUT > expected.txt
 
 # Runs the program
-./calc 3 > output.txt 
+./calc 3.5 4.5 > output.txt 
 
 # Ensures exit code is Zero
 if [ $? -eq 0 ]; then
@@ -14,7 +14,7 @@ fi
 
 # Ensures differences *are* found
 diff expected.txt output.txt
-if [ $? -eq 0 ]; then
+if [ $? -ne 0 ]; then
     echo "Somehow, the decimals are adding?!"
     rm output.txt
     rm expected.txt
