@@ -16,8 +16,8 @@ fi
 diff output.txt expected.txt
 if [ $? -ne 0 ]; then
     echo "Somehow, 617+617 is not equal to 1234!!"
-    rm expected.txt
     rm output.txt
+    rm expected.txt
     exit 1
 fi
 
@@ -25,6 +25,6 @@ fi
 echo "617+617 = 1234: PASS"
 
 # Cleans up files created
-rm expected.txt
 rm output.txt
+rm expected.txt
 exit 0
