@@ -2,7 +2,7 @@
 echo TOO BIG > expected.txt
 
 # Runs the program
-./calc 534 9 > output.txt 
+./calc 514 5 > output.txt 
 
 # Ensures exit code is Zero
 if [ $? -eq 0 ]; then

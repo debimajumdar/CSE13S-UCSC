@@ -2,7 +2,7 @@
 echo BAD INPUT > expected.txt
 
 # Runs the program
-./calc 3.5 4.5 > output.txt 
+./calc 3.5 4.4 > output.txt 
 
 # Ensures exit code is Zero
 if [ $? -eq 0 ]; then

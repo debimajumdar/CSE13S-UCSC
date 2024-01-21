@@ -1,8 +1,8 @@
 # Creates the example output
-echo 1022 > expected.txt
+echo 1024 > expected.txt
 
 # Runs the program
-./calc 511 511 > output.txt 
+./calc 512 512 > output.txt 
 
 # Ensures exit code is Zero
 if [ $? -ne 0 ]; then
