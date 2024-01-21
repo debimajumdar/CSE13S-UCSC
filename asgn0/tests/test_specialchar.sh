@@ -1,8 +1,8 @@
 # Creates the example output
-echo BAD INPUT > output.txt
+echo BAD INPUT > expected.txt
 
 # Runs the program
-./calc 3 @> expected.txt 
+./calc 3 @ > output.txt 
 
 # Ensures exit code is Zero
 if [ $? -eq 0 ]; then
