@@ -26,5 +26,5 @@ echo "Test does not find that 3+4 = 8: PASS"
 
 # Cleans up files created
 rm output.txt 
-rm input.txt
+rm expected.txt
 exit 0
