@@ -2,7 +2,7 @@
 echo -2 > expected.txt
 
 # Runs the program
-./calc -6 -4 > output.txt 
+./calc -6 4 > output.txt 
 
 # Ensures exit code is Zero
 if [ $? -ne 0 ]; then
