@@ -9,16 +9,16 @@ const DiceResult dice[6] = { DOT, DOT, DOT, LEFT, CENTER, RIGHT };
 int main(void) {
     int totalPlayers;
 
-    printf("Enter the number of players (3 to 10): ");
+    printf("Number of players (3 to 10)? ");
     int scanfResult = scanf("%d", &totalPlayers);
 
     if (scanfResult < 1 || totalPlayers < 3 || totalPlayers > 10) {
-        fprintf(stderr, "Invalid number of players. Setting to 3.\n");
+        fprintf(stderr, "Invalid number of players. Using 3 instead.\n");
         totalPlayers = 3;
     }
 
     unsigned randomSeed;
-    printf("Enter the random seed: ");
+    printf("Random-number seed? ");
     scanfResult = scanf("%u", &randomSeed);
 
     if (scanfResult < 1) {
@@ -60,7 +60,7 @@ int main(void) {
         }
 
         if (rolls > 0) {
-            printf(" ends their turn with %d\n", playerChips[currentPlayerIndex]);
+            printf(" ends her turn with %d\n", playerChips[currentPlayerIndex]);
         }
 
         int winnersCount = 0, lastWinnerIndex = 0;
