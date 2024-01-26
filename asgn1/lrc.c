@@ -1,80 +1,82 @@
-#include "names.h" // Include header file containing player names
-
+#include "names.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef enum { DOT, LEFT, CENTER, RIGHT } Position;
+typedef enum { DOT, LEFT, CENTER, RIGHT } DiceResult;
 
-const Position die[6] = { DOT, DOT, DOT, LEFT, CENTER, RIGHT };
+const DiceResult dice[6] = { DOT, DOT, DOT, LEFT, CENTER, RIGHT };
 
 int main(void) {
-    int num_players;
+    int totalPlayers;
 
-    printf("Number of players (3 to 10)? ");
-    int scanf_result = scanf("%d", &num_players);
+    printf("Enter the number of players (3 to 10): ");
+    int scanfResult = scanf("%d", &totalPlayers);
 
-    if (scanf_result < 1 || num_players < 3 || num_players > 10) {
-        fprintf(stderr, "Invalid number of players. Using 3 instead.\n");
-        num_players = 3;
+    if (scanfResult < 1 || totalPlayers < 3 || totalPlayers > 10) {
+        fprintf(stderr, "Invalid number of players. Setting to 3.\n");
+        totalPlayers = 3;
     }
 
-    unsigned seed; // Variable for the random seed
-    printf("Random-number seed? ");
-    scanf_result = scanf("%u", &seed);
+    unsigned randomSeed;
+    printf("Enter the random seed: ");
+    scanfResult = scanf("%u", &randomSeed);
 
-    if (scanf_result < 1) {
+    if (scanfResult < 1) {
         fprintf(stderr, "Invalid seed. Using 4823 instead.\n");
-        seed = 4823;
+        randomSeed = 4823;
     }
-    srandom(seed);
+    srandom(randomSeed);
 
-    int chips[num_players];
-    for (int i = 0; i < num_players; i++) {
-        chips[i] = 3;
+    int playerChips[totalPlayers];
+    for (int i = 0; i < totalPlayers; i++) {
+        playerChips[i] = 3;
     }
 
-    int currentPlayer = 0;
+    int currentPlayerIndex = 0;
     while (1) {
-        int diceToRoll = chips[currentPlayer] > 3 ? 3 : chips[currentPlayer];
+        int rolls = playerChips[currentPlayerIndex] > 3 ? 3 : playerChips[currentPlayerIndex];
 
-        if (diceToRoll > 0) {
-            printf("%s:", player_name[currentPlayer]); // Print the current player's name
+        if (rolls > 0) {
+            printf("%s:", player_name[currentPlayerIndex]);
         }
 
-        for (int i = 0; i < diceToRoll; i++) {
-            Position roll = die[random() % 6]; // Generate a random roll
+        for (int i = 0; i < rolls; i++) {
+            DiceResult roll = dice[random() % 6];
             switch (roll) {
             case LEFT:
-                chips[currentPlayer]--;
-                chips[(currentPlayer + 1) % num_players]++;
+                playerChips[currentPlayerIndex]--;
+                playerChips[(currentPlayerIndex + 1) % totalPlayers]++;
                 break;
-            case CENTER: chips[currentPlayer]--; break;
+            case CENTER:
+                playerChips[currentPlayerIndex]--;
+                break;
             case RIGHT:
-                chips[currentPlayer]--;
-                chips[(currentPlayer - 1 + num_players) % num_players]++;
+                playerChips[currentPlayerIndex]--;
+                playerChips[(currentPlayerIndex - 1 + totalPlayers) % totalPlayers]++;
                 break;
-            default: break;
+            default:
+                break;
             }
         }
 
-        if (diceToRoll > 0) {
-            printf(" ends her turn with %d\n", chips[currentPlayer]);
+        if (rolls > 0) {
+            printf(" ends their turn with %d\n", playerChips[currentPlayerIndex]);
         }
 
-        int winners = 0, lastPlayerWithChips = 0;
-        for (int i = 0; i < num_players; i++) {
-            if (chips[i] > 0) {
-                winners++;
-                lastPlayerWithChips = i;
+        int winnersCount = 0, lastWinnerIndex = 0;
+        for (int i = 0; i < totalPlayers; i++) {
+            if (playerChips[i] > 0) {
+                winnersCount++;
+                lastWinnerIndex = i;
             }
         }
 
-        if (winners == 1) {
-            printf("%s won!\n", player_name[lastPlayerWithChips]);
+        if (winnersCount == 1) {
+            printf("%s won!\n", player_name[lastWinnerIndex]);
             break;
         }
 
-        currentPlayer = (currentPlayer + 1) % num_players;
+        currentPlayerIndex = (currentPlayerIndex + 1) % totalPlayers;
     }
     return 0;
 }
