@@ -51,13 +51,15 @@ void test_read_letter() {
     printf("Test 2: Enter '123' and press Enter\n");
     fflush(stdin);
     char result2 = read_letter();
-    printf("Result: %s\n", (result2 == '\0') ? "Pass" : "Fail"); // Expecting null character for invalid input
+    printf("Result: %s\n",
+        (result2 == '\0') ? "Pass" : "Fail"); // Expecting null character for invalid input
 
     // Additional Test Cases
     printf("Test 3: Enter 'C' and press Enter\n");
     fflush(stdin);
     char result3 = read_letter();
-    printf("Result: %s\n", (result3 == '\0') ? "Pass" : "Fail"); // Expecting null character for non-lowercase input
+    printf("Result: %s\n",
+        (result3 == '\0') ? "Pass" : "Fail"); // Expecting null character for non-lowercase input
 
     printf("\n");
 }

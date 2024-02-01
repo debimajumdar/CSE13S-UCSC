@@ -24,7 +24,8 @@ bool validate_secret(const char *secret) {
     }
 
     for (int i = 0; i < length; i++) {
-        if (!is_lowercase_letter(secret[i]) && secret[i] != ' ' && secret[i] != '\'' && secret[i] != '-') {
+        if (!is_lowercase_letter(secret[i]) && secret[i] != ' ' && secret[i] != '\''
+            && secret[i] != '-') {
             printf("Invalid character: '%c'\n", secret[i]);
             return false;
         }
@@ -50,7 +51,8 @@ char read_letter(void) {
     do {
         printf("Guess a letter: ");
         c = getchar();
-        while (getchar() != '\n');
+        while (getchar() != '\n')
+            ;
     } while (c == '\n');
 
     return (char) c;
