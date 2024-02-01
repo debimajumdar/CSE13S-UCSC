@@ -1,68 +1,67 @@
 #include "hangman_helpers.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int main(int argc, char *argv[]) {
-    // Check if the correct number of command-line arguments is provided
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <secret_word_or_phrase>\n", argv[0]);
-        return 1;
-    }
+void play_game(const char *secret) {
+    char guessed_letters[27] = { 0 }; // array for ALL guessed letters
+    char incorrect_chars[27] = { 0 }; // array for ONLY WRONG character inputs
+    int mistakes = 0; // increments
 
-    // Get the secret word or phrase from the command line
-    const char *secret = argv[1];
+    while (!is_game_over(secret, guessed_letters, mistakes)) {
+        printf(CLEAR_SCREEN);
 
-    // Validate the secret
-    if (!validate_secret(secret)) {
-        fprintf(stderr, "Invalid secret. Exiting.\n");
-        return 1;
-    }
+        printf("%s", arts[mistakes]);
+        phrase(secret, guessed_letters);
+        show_incorrect_guesses(incorrect_chars);
+        printf("\n");
 
-    // Initialize game state variables
-    char guessedLetters[256] = ""; // Assuming the maximum length of guessed letters is 256
-    int wrongAttempts = 0;
-
-    // Implement the main game loop
-    while (!is_game_over(secret, guessedLetters, wrongAttempts)) {
-        // Print the current game state
-        phrase(secret, guessedLetters);
-        show_incorrect_guesses(guessedLetters);
-
-        // Get a letter from the user
         char guess = read_letter();
+        while (string_contains_character(guessed_letters, guess) || !is_lowercase_letter(guess)) {
+            guess = read_letter(); // prompt user until a valid guess is received
+        }
 
-        // Check if the guessed letter is correct
-        if (string_contains_character(secret, guess)) {
-            printf("Correct guess: %c\n", guess);
-            // Update guessed letters
-            if (!string_contains_character(guessedLetters, guess)) {
-                strncat(guessedLetters, &guess, 1);
-            }
-            // Check for win condition
-            if (has_guessed_all(secret, guessedLetters)) {
-                phrase(secret, guessedLetters);
-                printf("You win! The secret phrase was: %s\n", secret);
-                return 0;
-            }
-        } else {
-            printf("Incorrect guess: %c\n", guess);
-            // Update guessed letters
-            if (!string_contains_character(guessedLetters, guess)) {
-                strncat(guessedLetters, &guess, 1);
-            }
-            wrongAttempts++;
+        strncat(guessed_letters, &guess, 1); // append guess to guessed letters
 
-            // Check for losing condition
-            if (wrongAttempts == LOSING_MISTAKE) {
-                phrase(secret, guessedLetters);
-                show_incorrect_guesses(guessedLetters);
-                printf("You lose! The secret phrase was: %s\n", secret);
-                return 0;
+        if (!string_contains_character(secret, guess)) {
+            if (is_lowercase_letter(guess)) {
+                strncat(incorrect_chars, &guess, 1);
             }
+            mistakes++;
         }
     }
 
+    if (mistakes == LOSING_MISTAKE) {
+        printf(CLEAR_SCREEN);
+        printf("%s", arts[mistakes]);
+        phrase(secret, guessed_letters);
+        show_incorrect_guesses(incorrect_chars);
+        printf("\n");
+        printf("You lose! The secret phrase was: %s\n", secret);
+    } else if (has_guessed_all(secret, guessed_letters)) {
+        printf(CLEAR_SCREEN);
+        printf("%s", arts[mistakes]);
+        phrase(secret, guessed_letters);
+        show_incorrect_guesses(incorrect_chars);
+        printf("\n");
+        printf("You win! The secret phrase was: %s\n", secret);
+    }
+}
+
+int main(int argc, char **argv) {
+    if (argc != 2) {
+        fprintf(stderr,
+            "wrong number of arguments\nusage: ./hangman <secret word or phrase>\nif the secret "
+            "is multiple words, you must quote it\n");
+        exit(1);
+    }
+
+    if (!validate_secret(argv[1])) {
+        exit(1);
+    }
+
+    play_game(argv[1]);
     return 0;
 }
