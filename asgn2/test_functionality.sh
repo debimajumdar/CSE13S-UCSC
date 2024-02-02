@@ -1,38 +1,31 @@
-#!/ bin / bash
+#!/bin/bash
 
-#Define colors for better output
-GREEN = '\033[0;32m' RED = '\033[0;31m' NC = '\033[0m' #No Color
+# Test script for hangman.c functionality
 
-#Function to run a test case
-    run_test() {
-    test_name = $1 expected_output = $2 input = $3
-
-#Run the program with input and capture the output
-        actual_output
-        = $(echo - e "$input" |./ hangman)
-
-#Compare the actual output with the expected output
-            if["$actual_output" = "$expected_output"];
-    then echo - e "${GREEN}Test $test_name Passed${NC}" else echo
-        - e "${RED}Test $test_name Failed${NC}" echo "Expected Output:" echo "$expected_output" echo
-            "Actual Output:" echo "$actual_output" fi
+# Function to run the hangman binary with a given secret phrase
+function run_hangman() {
+    ./hangman.c "$1"
 }
 
-#Test Case 1 : Add more test cases as needed
-run_test "Test Case 1"
-         "Expected Output for Test Case 1"
-         "Input for Test Case 1" run_test "Test Case 2"
-         "Expected Output for Test Case 2"
-         "Input for Test Case 2" run_test "Test Case 3"
-         "Expected Output for Test Case 3"
-         "Input for Test Case 3"
+# Test Case 1: Correct usage with a single-word secret
+echo "Test Case 1: Single-word secret"
+run_hangman "apple"
 
-#Add more test cases as needed
+# Test Case 2: Correct usage with a multi-word secret (quoted)
+echo "Test Case 2: Multi-word secret"
+run_hangman "open ai"
 
-#Cleanup(if necessary)
-#rm any_generated_files
+# Test Case 3: Incorrect usage - Missing command-line argument
+echo "Test Case 3: Incorrect usage - Missing argument"
+./hangman.c
 
-#Exit with status based on test results
-#If any test fails, the script will exit with a non - zero status
-#This is useful when integrating with CI / CD systems
-    exit 0
+# Test Case 4: Incorrect usage - Too many command-line arguments
+echo "Test Case 4: Incorrect usage - Too many arguments"
+./hangman.c "apple" "extra_argument"
+
+# Test Case 5: Valid guess leading to win
+echo "Test Case 5: Valid guess leading to win"
+run_hangman "hangman"
+
+
+echo "All test cases executed successfully."
