@@ -3,8 +3,6 @@ CFLAGS = -Werror -Wall -Wextra -Wconversion -Wdouble-promotion -Wstrict-prototyp
 LFLAGS = 
 EXEC = hangman
 HEADERS = hangman_helpers.h
-SRC_FILES = hangman.c hangman_helpers.c
-OBJ_FILES = $(SRC_FILES:.c=.o)
 
 all: $(EXEC)
 
