@@ -9,7 +9,7 @@ bool validate_secret(const char *secret) {
         size_t length = strlen(secret);
 
         if (length > 256) {
-            printf("invalid secret: Phrase is over 256 characters.\n");
+            printf("the secret phrase is over 256 characters\n");
             return false;
         }
 
@@ -20,6 +20,9 @@ bool validate_secret(const char *secret) {
                     || current_character == '-' || current_character == '\''
                     || current_character == '\0')) {
                 printf("invalid character: '%c'\n", current_character);
+                printf(
+                    "the secret phrase must contain only lowercase letters, spaces, hyphens, and "
+                    "apostrophes\n");
                 return false;
             }
         }

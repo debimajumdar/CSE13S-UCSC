@@ -3,67 +3,54 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-void test_is_lowercase_letter() {
-    printf("Testing is_lowercase_letter:\n");
-    printf("Test 1: %s\n", is_lowercase_letter('a') ? "Pass" : "Fail");
-    printf("Test 2: %s\n", is_lowercase_letter('z') ? "Pass" : "Fail");
-    printf("Test 3: %s\n", !is_lowercase_letter('A') ? "Pass" : "Fail");
-    printf("Test 4: %s\n", !is_lowercase_letter('Z') ? "Pass" : "Fail");
-    printf("Test 5: %s\n", !is_lowercase_letter('1') ? "Pass" : "Fail");
-    // Additional Test Cases
-    printf("Test 6: %s\n", !is_lowercase_letter('@') ? "Pass" : "Fail"); // Non-alphabetic character
-    printf("Test 7: %s\n", is_lowercase_letter('c') ? "Pass" : "Fail");
-    printf("\n");
-}
-
-void test_validate_secret() {
-    printf("Testing validate_secret:\n");
-    const char *validSecret = "hangman is fun";
-    printf("Test 1: %s\n", validate_secret(validSecret) ? "Pass" : "Fail");
-    const char *invalidSecret
-        = "a very long secret phrase that exceeds the limit of 256 characters";
-    printf("Test 2: %s\n", !validate_secret(invalidSecret) ? "Pass" : "Fail");
-    printf("\n");
-}
-
-void test_string_contains_character() {
-    printf("Testing string_contains_character:\n");
-    const char *testString = "hangman";
-    printf("Test 1: %s\n", string_contains_character(testString, 'a') ? "Pass" : "Fail");
-    printf("Test 2: %s\n", !string_contains_character(testString, 'z') ? "Pass" : "Fail");
-    const char *emptyString = " ";
-    printf("Test 3: %s\n", !string_contains_character(emptyString, 'a') ? "Pass" : "Fail");
-    printf("\n");
-}
+char read_letter(void);
+bool string_contains_character(const char *s.char c);
+bool validate_secret(const char *secret);
+bool is_lowercase_letter(char c);
 
 void test_read_letter() {
     printf("Testing read_letter:\n");
-    printf("Test 1: Enter 'a' and press Enter\n");
-    // Flush the input buffer before reading a character
+    printf("Test 1: Enter 'n'\n");
     fflush(stdin);
-    char result1 = read_letter();
-    printf("Result: %s\n", (result1 == 'a') ? "Pass" : "Fail");
-    // Consume any additional characters in the input buffer
+    char result = read_letter();
+    printf("Results: %s\n", (result == 'n') ? "Pass" : "Fail");
     int c;
     while ((c = getchar()) != '\n' && c != EOF)
         ;
-
-    printf("Test 2: Enter '123' and press Enter\n");
-    fflush(stdin);
-    char result2 = read_letter();
-    printf("Result: %s\n",
-        (result2 == '\0') ? "Pass" : "Fail"); // Expecting null character for invalid input
-
-    // Additional Test Cases
-    printf("Test 3: Enter 'C' and press Enter\n");
-    fflush(stdin);
-    char result3 = read_letter();
-    printf("Result: %s\n",
-        (result3 == '\0') ? "Pass" : "Fail"); // Expecting null character for non-lowercase input
-
-    printf("\n");
+    prinf("\n");
 }
 
+void test string_contain_character() {
+    printf("Testing string_contains_character:\n");
+    const char *test_string = "pug";
+    printf("Test 1: %s\n", string_contains_character(test_string, 'u') ? "Pass" : "Fail");
+    printf("Test 2: %s\n", string_contains_character(test_string, 'd') ? "Pass" : "Fail");
+    printf("Test 3: %s\n", string_contains_character(test_string, '0') ? "Pass" : "Fail");
+    printf("Test 4: %s\n", string_contains_character(test_string, '@') ? "Pass" : "Fail");
+    const char *test_string = " ";
+    printf("Test 5: %s\n", string_contains_character(test_string, 'd') ? "Pass" : "Fail");
+}
+
+void validate_secret(const char *secret);
+printf("Testing validate_secret:\n");
+const char *validsecret = "pugs are the cutest";
+printf("Test 1: %s\n", validate_secret(validsecret) ? "Pass" : "Fail");
+const char *validsecret
+    = "pugs are the cutest and it should be mandatory for everyone to get one if not you go to "
+      "jail. Pugs are very friendly and have a lot of personality. They are lap dogs and will love "
+      "children and everyone that takes care of them. I am going to get a pug once I graduate "
+      "college and have my own place. Although if you don't get a pug every family should get an "
+      "animal whether its a dog, cat, rabbit, etc.";
+printf("Test 2: %s\n", validate_secret(validsecret) ? "Pass" : "Fail");
+}
+
+void test_is_lowercase_letter() {
+    printf("Testing is_lowercase_letter:\n");
+    printf("Test 1: %s\n", is_lowercase_letter('a') ? "Pass" : "Fail");
+    printf("Test 2: %s\n", is_lowercase_letter('A') ? "Pass" : "Fail");
+    printf("Test 3: %s\n", is_lowercase_letter('w') ? "Pass" : "Fail");
+    printf("Test 4: %s\n", is_lowercase_letter('W') ? "Pass" : "Fail");
+}
 int main() {
     test_is_lowercase_letter();
     test_validate_secret();
