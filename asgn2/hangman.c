@@ -1,6 +1,17 @@
 // hangman.c
 
 #include "hangman_helpers.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Declaration for the missing function
+bool has_guessed_all(const char *secret, const char *guessed_letters);
+void initialize_game(const char *secret, char *phrase);
+bool is_game_over(const char *secret, const char *phrase, const char *eliminated, int incorrect_attempts);
+void print_game_state(const char *arts[], int gallows_state, const char *phrase, const char *eliminated);
+void update_phrase(const char *secret, char *phrase, char guess);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -46,7 +57,6 @@ int main(int argc, char *argv[]) {
 
         if (string_contains_character(secret, guess)) {
             update_phrase(secret, phrase, guess);
-
             if (has_guessed_all(secret, phrase)) {
                 print_game_state(arts, gallows_state, phrase, eliminated);
                 printf("You win! The secret phrase was: %s\n", secret);

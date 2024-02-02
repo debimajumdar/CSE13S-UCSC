@@ -1,5 +1,8 @@
 #include "hangman_helpers.h"
-
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 bool is_lowercase_letter(char c) {
     return c >= 'a' && c <= 'z';
 }
