@@ -24,24 +24,18 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
     printf("%s", CLEAR_SCREEN);
     printf("%s", arts[gallows_state]);
     printf("    Phrase: ");
+
     for (int i = 0; secret[i] != '\0'; ++i) {
         char current_char = secret[i];
         if (strchr(punctuation, current_char) != NULL
             || string_contains_character(guessed_letters, current_char)) {
-            printf("%c", current_char);
+            printf("%c ", current_char);
         } else {
-            printf("_");
+            printf("_ ");
         }
     }
-    printf("\n");
 
-    // Create a non-const array for sorting
-    char temp_eliminated_letters[MAX_LENGTH];
-    strcpy(temp_eliminated_letters, eliminated_letters);
-
-    qsort(
-        temp_eliminated_letters, strlen(temp_eliminated_letters), sizeof(char), compare_characters);
-    printf("Eliminated: %s\n", temp_eliminated_letters);
+    printf("\nEliminated: %s\n", eliminated_letters);
 }
 
 int main(int argc, char *argv[]) {
