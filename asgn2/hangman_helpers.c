@@ -89,4 +89,3 @@ void print_game_state(
     printf("Eliminated: %s\n", sorted_eliminated);
     printf("\n");
 }
-
