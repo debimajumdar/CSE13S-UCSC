@@ -22,7 +22,7 @@ format:
 tests: test_functionality test_helpers
 
 test_functionality: test_functionality.sh
-              ./test_functionality.sh
+	 ./test_functionality.sh
 test_helpers: test_helpers.c hangman_helpers.o
            $(CC) $(CFLAGS) $< hangman_helpers.o -o test_helpers
-          ./test_helpers
+	  ./test_helpers
