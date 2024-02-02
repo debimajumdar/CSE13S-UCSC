@@ -1,8 +1,5 @@
 #include "hangman_helpers.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
 bool is_lowercase_letter(char c) {
     return c >= 'a' && c <= 'z';
 }
@@ -87,8 +84,9 @@ void print_game_state(
     qsort(sorted_eliminated, strlen(sorted_eliminated), sizeof(char), compare_characters);
 
     printf(CLEAR_SCREEN);
-    printf("%s\n\n", arts[gallows_state]);
-    printf("    Phrase: %s\n", phrase);
+    printf("%s", arts[gallows_state]);
+    printf(“\n\n    Phrase: %s\n", phrase);
     printf("Eliminated: %s\n", sorted_eliminated);
     printf("\n");
 }
+
