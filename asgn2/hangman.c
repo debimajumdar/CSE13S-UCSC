@@ -37,7 +37,7 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
             if (string_contains_character(guessed_letters, current_char)) {
                 printf("%c", current_char);
             } else {
-                printf("_");
+                printf("");
             }
         }
     }
