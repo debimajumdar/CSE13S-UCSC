@@ -1,21 +1,36 @@
 #include "hangman_helpers.h"
 
 bool is_lowercase_letter(char c) {
-    return c >= 'a' && c <= 'z';
+    return (c >= 'a' && c <= 'z');
 }
 
-char read_letter(void) {
-    char guess;
+bool validate_secret(const char *secret) {
+    if (secret != NULL) {
+        size_t length = strlen(secret);
 
-    do {
-        guess = getchar();
-    } while (guess == '\n');
+        if (length > 256) {
+            printf("the secret phrase is over 256 characters\n");
+            return false;
+        }
 
-    // Clear the input buffer
-    while (getchar() != '\n' && getchar() != EOF)
-        ;
+        for (size_t i = 0; i < length; ++i) {
+            char current_character = secret[i];
 
-    return guess;
+            if (!((current_character >= 'a' && current_character <= 'z') || current_character == ' '
+                    || current_character == '-' || current_character == '\''
+                    || current_character == '\0')) {
+                printf("invalid character: '%c'\n", current_character);
+                printf(
+                    "the secret phrase must contain only lowercase letters, spaces, hyphens, and "
+                    "apostrophes\n");
+                return false;
+            }
+        }
+        return true;
+    } else {
+        printf("invalid secret: NULL\n");
+        return false;
+    }
 }
 
 bool string_contains_character(const char *s, char c) {
@@ -28,64 +43,16 @@ bool string_contains_character(const char *s, char c) {
     return false;
 }
 
-bool validate_secret(const char *secret) {
-    int secret_length = strlen(secret);
-
-    if (secret_length > MAX_LENGTH) {
-        fprintf(stdout, "the secret phrase is over 256 characters\n");
-        exit(1);
-    }
-
-    for (int i = 0; i < secret_length; i++) {
-        char c = secret[i];
-        if (!is_lowercase_letter(c) && c != ' ' && c != '-' && c != '\'') {
-            printf("invalid character: '%c'\n", c);
-            printf("the secret phrase must contain only lowercase letters, spaces, hyphens, and "
-                   "apostrophes\n");
-            return false;
+char read_letter(void) {
+    int c;
+    printf("\nGuess a letter: ");
+    c = getchar();
+    while (1) {
+        if (c == '\n') {
+            continue;
         }
-    }
-
-    return true;
-}
-void initialize_game(char *secret, char *phrase) {
-    int secret_length = strlen(secret);
-    for (int i = 0; i < secret_length; i++) {
-        char c = secret[i];
-        if (c == ' ' || c == '-' || c == '\'') {
-            phrase[i] = c;
-        } else {
-            phrase[i] = '_';
+        while (getchar() != '\n') {
         }
+        return (char) c;
     }
-    phrase[secret_length] = '\0';
-}
-
-void update_phrase(const char *secret, char *phrase, char guess) {
-    int phrase_length = strlen(phrase);
-    int secret_length = strlen(secret);
-    int length = (phrase_length < secret_length) ? phrase_length : secret_length;
-
-    for (int i = 0; i < length; i++) {
-        if (secret[i] == guess) {
-            phrase[i] = guess;
-        }
-    }
-}
-
-int compare_characters(const void *a, const void *b) {
-    return (*(char *) a - *(char *) b);
-}
-
-void print_game_state(
-    const char *arts[], int gallows_state, const char *phrase, const char *eliminated) {
-    char sorted_eliminated[26];
-    strcpy(sorted_eliminated, eliminated);
-    qsort(sorted_eliminated, strlen(sorted_eliminated), sizeof(char), compare_characters);
-
-    printf(CLEAR_SCREEN);
-    printf("%s\n\n", arts[gallows_state]);
-    printf("    Phrase: %s\n", phrase);
-    printf("Eliminated: %s\n", sorted_eliminated);
-    printf("\n");
 }
