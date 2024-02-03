@@ -2,109 +2,132 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-void arrange_uncovered_phrase(const char *secret, const char *guessed_list) {
-    printf("    Phrase: ");
-    for (int i = 0; secret[i] != '\0'; i += 1) {
-        if (string_contains_character(guessed_list, secret[i]))
-            printf("%c", secret[i]);
-        else if (secret[i] == ' ' || secret[i] == '-' || secret[i] == '\'')
-            printf("%c", secret[i]);
-        else
-            printf("_");
+void initialize_game(const char *secret, char *phrase);
+bool is_game_over(const char *secret, const char *phrase, int incorrect_attempts);
+void print_game_state(
+    const char *arts[], int gallows_state, const char *phrase, const char *eliminated);
+void update_phrase(const char *secret, char *phrase, char guess);
+bool has_guessed_all(const char *secret, const char *guessed_letters);
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr,
+            "wrong number of arguments\nusage: %s <secret word or phrase>\nif the secret is "
+            "multiple words, you must quote it\n",
+            argv[0]);
+        return 1;
     }
-    printf("\n");
-}
-
-bool phrase_guessed(const char *secret, const char *guessed_list) {
-    for (int i = 0; secret[i] != '\0'; i += 1) {
-        if (string_contains_character(guessed_list, secret[i]) == false
-            && is_lowercase_letter(secret[i]))
-            return false;
+    const char *user_secret = argv[1]; // The secret word is the second argument
+    if (!(validate_secret(user_secret))) {
+        return 1;
     }
-    return true;
-}
+    char secret[MAX_LENGTH + 1] = { 0 };
+    char phrase[MAX_LENGTH + 1] = { 0 };
+    char eliminated[26] = { 0 }; // An array to store eliminated letters
+    int eliminated_count = 0;
+    int incorrect_attempts = 0;
+    bool game_over = false;
+    int gallows_state = 0;
+    strncpy(secret, user_secret, MAX_LENGTH);
 
-bool game_over(const char *secret, const char *guessed_list, int false_guesses) {
-    if (false_guesses >= LOSING_MISTAKE)
-        return true;
-    else if (phrase_guessed(secret, guessed_list) == true)
-        return true;
-    else
-        return false;
-}
+    initialize_game(secret, phrase);
 
-void print_guessed_incorrectly_list(char *guessed_list) {
-    printf("Eliminated: ");
+    while (!game_over) {
+        char guess;
+        print_game_state(arts, gallows_state, phrase, eliminated);
+        while (1) {
+            printf("Guess a letter: ");
+            guess = read_letter();
 
-    int letter_count = (int) strlen(guessed_list);
-    for (int i = 0; i < letter_count; i += 1) {
-        for (int x = 0; x < letter_count - 1 - i; x += 1) {
-            if (guessed_list[x] > guessed_list[x + 1]) {
-                char throwaway = guessed_list[x];
-                guessed_list[x] = guessed_list[x + 1];
-                guessed_list[x + 1] = throwaway;
+            if (!is_lowercase_letter(guess)) {
+                continue;
+            } else if (string_contains_character(eliminated, guess)
+                       || string_contains_character(phrase, guess)) {
+                continue;
+            } else {
+                break; // Valid letter entered
+            }
+        }
+        if (string_contains_character(secret, guess)) {
+            update_phrase(secret, phrase, guess);
+            if (strcmp(user_secret, phrase) == 0) {
+                print_game_state(arts, gallows_state, phrase, eliminated);
+                printf("You win! The secret phrase was: %s\n", secret);
+                game_over = true;
+            }
+        } else {
+            eliminated[eliminated_count++] = guess;
+            incorrect_attempts++;
+            gallows_state = incorrect_attempts;
+
+            if (incorrect_attempts == LOSING_MISTAKE) {
+                print_game_state(arts, gallows_state, phrase, eliminated);
+
+                printf("You lose! The secret phrase was: %s\n", secret);
+                game_over = true;
             }
         }
     }
-
-    for (int l = 0; guessed_list[l] != '\0'; l += 1)
-        printf("%c", guessed_list[l]);
-    printf("\n");
+    return 0;
 }
 
-int main(int argc, char **argv) {
-    //game information
-    int incorrect_guesses = 0;
-    char already_guessed[26];
-    char wrong_letters[26];
-    char secret[strlen(argv[1]) + 1];
-    if (argc != 2) {
-        fprintf(stderr, "if the secret is multiple words, you must quote it");
-        exit(1);
+void initialize_game(const char *secret, char *phrase) {
+    for (size_t i = 0; secret[i] != '\0'; ++i) {
+        if (is_lowercase_letter(secret[i])) {
+            phrase[i] = '_';
+        } else if (secret[i] == ' ') {
+            phrase[i] = ' ';
+        } else {
+            phrase[i] = secret[i]; // Copy non-letter characters directly
+        }
     }
-    if (validate_secret(argv[1]) == false)
-        exit(1);
-    strcpy(secret, argv[1]);
+    phrase[strlen(secret)] = '\0'; // Null-terminate the phrase
+}
 
-    //game loop
+void update_phrase(const char *secret, char *phrase, char guess) {
+    for (size_t i = 0; secret[i] != '\0'; ++i) {
+        if (secret[i] == guess) {
+            phrase[i] = guess;
+        }
+    }
+}
 
-    while (game_over(secret, already_guessed, incorrect_guesses) == false) {
-        printf(CLEAR_SCREEN);
-        printf("%s\n\n", arts[incorrect_guesses]);
-        arrange_uncovered_phrase(secret, already_guessed);
-        print_guessed_incorrectly_list(wrong_letters);
-        printf("\n");
+bool is_game_over(const char *secret, const char *phrase, int incorrect_attempts) {
 
-        char current_guess = read_letter();
+    return has_guessed_all(secret, phrase) || (incorrect_attempts == LOSING_MISTAKE);
+}
 
-        while (is_lowercase_letter(current_guess) == false
-               || string_contains_character(already_guessed, current_guess))
-            current_guess = read_letter();
+void print_game_state(
+    const char *arts[], int gallows_state, const char *phrase, const char *eliminated) {
 
-        strncat(already_guessed, &current_guess, 1);
+    printf("%s", CLEAR_SCREEN);
+    printf("%s", arts[gallows_state]);
+    printf("    Phrase: ");
 
-        if (string_contains_character(secret, current_guess) == false) {
-            incorrect_guesses += 1;
-            strncat(wrong_letters, &current_guess, 1);
+    for (int i = 0; phrase[i] != '\0'; ++i) {
+        char current_char = phrase[i];
+        if (strchr(punctuation, current_char) != NULL
+            || string_contains_character(eliminated, current_char)) {
+            printf("%c ", current_char);
+        } else {
+            printf("_ ");
         }
     }
 
-    if (phrase_guessed(secret, already_guessed) == true) {
-        printf(CLEAR_SCREEN);
-        printf("%s\n\n", arts[incorrect_guesses]);
-        arrange_uncovered_phrase(secret, already_guessed);
-        print_guessed_incorrectly_list(wrong_letters);
-        printf("\n");
-        printf("You win! The secret phrase was: %s\n", secret);
+    printf("\nEliminated: %s\n", eliminated);
+}
 
-    } else if (incorrect_guesses == LOSING_MISTAKE) {
-        printf(CLEAR_SCREEN);
-        printf("%s\n\n", arts[LOSING_MISTAKE]);
-        arrange_uncovered_phrase(secret, already_guessed);
-        print_guessed_incorrectly_list(wrong_letters);
-        printf("\n");
-        printf("You lose! The secret phrase was: %s\n", secret);
+bool has_guessed_all(const char *secret, const char *guessed_letters) {
+
+    for (int i = 0; secret[i] != '\0'; ++i) {
+        char current_char = secret[i];
+        if (strchr(punctuation, current_char) == NULL
+            && !string_contains_character(guessed_letters, current_char)) {
+            return false;
+        }
     }
+    return true;
 }

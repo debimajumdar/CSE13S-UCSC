@@ -12,7 +12,8 @@ char read_letter(void) {
     } while (guess == '\n');
 
     // Clear the input buffer
-    while (getchar() != '\n' && getchar() != EOF);
+    while (getchar() != '\n' && getchar() != EOF)
+        ;
 
     return guess;
 }
