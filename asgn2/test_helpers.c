@@ -36,11 +36,10 @@ printf("Testing validate_secret:\n");
 const char *validsecret = "pugs are the cutest";
 printf("Test 1: %s\n", validate_secret(validsecret) ? "Pass" : "Fail");
 const char *validsecret
-    = "pugs are the cutest and it should be mandatory for everyone to get one if not you go to "
-      "jail. Pugs are very friendly and have a lot of personality. They are lap dogs and will love "
-      "children and everyone that takes care of them. I am going to get a pug once I graduate "
-      "college and have my own place. Although if you don't get a pug every family should get an "
-      "animal whether its a dog, cat, rabbit, etc.";
+    = "i miss my family and sister so much."
+      "i want to go home i live very far."
+      "my family lives in india so i only see them once or twice a year now."
+      "anyways";
 printf("Test 2: %s\n", validate_secret(validsecret) ? "Pass" : "Fail");
 }
 
