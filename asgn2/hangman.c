@@ -35,7 +35,7 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
             printf("_");
         }
     }
-    printf("\n");
+    // printf("\n");
 
     // Create a non-const array for sorting
     char temp_eliminated_letters[MAX_LENGTH];
