@@ -19,5 +19,3 @@ format:
 	clang-format -i -style=file *.[ch]
 
 .PHONY: all clean format
-
-
