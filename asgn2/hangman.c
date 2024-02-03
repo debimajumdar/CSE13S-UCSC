@@ -23,22 +23,17 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
     const char *guessed_letters, const char *eliminated_letters) {
     printf("%s", CLEAR_SCREEN);
     printf("%s", arts[gallows_state]);
-    printf("");
+    printf("    Phrase: ");
 
-    for (int i = 0; secret[i] != '\0'; ++i) {
+    for (size_t i = 0; secret[i] != '\0'; ++i) {
         char current_char = secret[i];
-
-        // Check if the current character is a valid character or a space/hyphen/apostrophe
-        if (strchr(punctuation, current_char) != NULL || current_char == ' ' || current_char == '-'
-            || current_char == '\'') {
+        if (strchr(punctuation, current_char) != NULL
+            || string_contains_character(guessed_letters, current_char)) {
             printf("%c", current_char);
+        } else if (current_char == ' ') {
+            printf(" ");
         } else {
-            // Check if the guessed letter matches the current character
-            if (string_contains_character(guessed_letters, current_char)) {
-                printf("%c", current_char);
-            } else {
-                printf("");
-            }
+            printf("_");
         }
     }
     printf("\n");
@@ -49,9 +44,8 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
 
     qsort(
         temp_eliminated_letters, strlen(temp_eliminated_letters), sizeof(char), compare_characters);
-    printf("    Phrase: ___%s\n", temp_eliminated_letters);
+    printf("Eliminated: %s\n", temp_eliminated_letters);
 }
-
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         fprintf(stderr, "wrong number of arguments\n");
