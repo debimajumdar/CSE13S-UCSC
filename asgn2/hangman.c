@@ -37,15 +37,6 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
             printf("_");
         }
     }
-    printf("\n");
-
-    if (gallows_state >= 1) {
-        printf("    (_)");
-    }
-
-    for (int i = 0; i < 8 - gallows_state; ++i) {
-        printf(" ");
-    }
 
     printf("\n");
 
