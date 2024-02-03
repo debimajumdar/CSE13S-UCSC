@@ -22,7 +22,7 @@ void test_read_letter() {
 
 void test string_contain_character() {
     printf("Testing string_contains_character:\n");
-    const char *test_string = "pug";
+    const char *test_string = "family";
     printf("Test 1: %s\n", string_contains_character(test_string, 'u') ? "Pass" : "Fail");
     printf("Test 2: %s\n", string_contains_character(test_string, 'd') ? "Pass" : "Fail");
     printf("Test 3: %s\n", string_contains_character(test_string, '0') ? "Pass" : "Fail");
@@ -33,13 +33,12 @@ void test string_contain_character() {
 
 void validate_secret(const char *secret);
 printf("Testing validate_secret:\n");
-const char *validsecret = "pugs are the cutest";
+const char *validsecret = "family is everythingt";
 printf("Test 1: %s\n", validate_secret(validsecret) ? "Pass" : "Fail");
-const char *validsecret
-    = "i miss my family and sister so much."
-      "i want to go home i live very far."
-      "my family lives in india so i only see them once or twice a year now."
-      "anyways";
+const char *validsecret = "i miss my family and sister so much."
+                          "i want to go home i live very far now from my family."
+                          "my family lives in india so i only see them once or twice a year now."
+                          "anyways family means no one leaves anyone behind";
 printf("Test 2: %s\n", validate_secret(validsecret) ? "Pass" : "Fail");
 }
 
