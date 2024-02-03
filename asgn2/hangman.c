@@ -23,7 +23,7 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
     const char *guessed_letters, const char *eliminated_letters) {
     printf("%s", CLEAR_SCREEN);
     printf("%s", arts[gallows_state]);
-    printf("    Phrase: ");
+    printf("");
 
     for (int i = 0; secret[i] != '\0'; ++i) {
         char current_char = secret[i];
