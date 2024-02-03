@@ -22,7 +22,6 @@ int compare_characters(const void *a, const void *b) {
 void print_game_state(const char *arts[], int gallows_state, const char *secret,
     const char *guessed_letters, const char *eliminated_letters) {
     printf("%s", CLEAR_SCREEN);
-    printf("%s", CLEAR_SCREEN);
     printf("%s", arts[gallows_state]);
     printf("    Phrase: ");
 
