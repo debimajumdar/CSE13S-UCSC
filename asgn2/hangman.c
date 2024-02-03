@@ -49,7 +49,7 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
 
     qsort(
         temp_eliminated_letters, strlen(temp_eliminated_letters), sizeof(char), compare_characters);
-    printf(" %s\n", temp_eliminated_letters);
+    printf("%s\n", temp_eliminated_letters);
 }
 
 int main(int argc, char *argv[]) {
