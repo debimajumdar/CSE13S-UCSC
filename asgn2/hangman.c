@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool all_letters_guessed(const char *secret, const char *guessed) {
+bool all_guessed(const char *secret, const char *guessed) {
     for (int i = 0; secret[i] != '\0'; ++i) {
         if (strchr(punctuation, secret[i]) == NULL
             && !string_contains_character(guessed, secret[i])) {
@@ -15,11 +15,11 @@ bool all_letters_guessed(const char *secret, const char *guessed) {
     return true;
 }
 
-int compare_characters(const void *a, const void *b) {
+int compare_char(const void *a, const void *b) {
     return (*(char *) a - *(char *) b);
 }
 
-void print_game_state(const char *arts[], int gallows_state, const char *secret,
+void print_game(const char *arts[], int gallows_state, const char *secret,
     const char *guessed_letters, const char *eliminated_letters) {
 
     printf("%s", CLEAR_SCREEN);
@@ -44,8 +44,7 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
     char temp_eliminated_letters[MAX_LENGTH];
     strcpy(temp_eliminated_letters, eliminated_letters);
 
-    qsort(
-        temp_eliminated_letters, strlen(temp_eliminated_letters), sizeof(char), compare_characters);
+    qsort(temp_eliminated_letters, strlen(temp_eliminated_letters), sizeof(char), compare_char);
     printf("Eliminated: %s\n", temp_eliminated_letters);
 }
 
@@ -66,8 +65,8 @@ int main(int argc, char *argv[]) {
     char guessed_letters[MAX_LENGTH] = { '\0' };
     char eliminated_letters[MAX_LENGTH] = { '\0' };
 
-    while (guesses < LOSING_MISTAKE && !all_letters_guessed(secret, guessed_letters)) {
-        print_game_state(arts, guesses, secret, guessed_letters, eliminated_letters);
+    while (guesses < LOSING_MISTAKE && !all_guessed(secret, guessed_letters)) {
+        print_game(arts, guesses, secret, guessed_letters, eliminated_letters);
 
         char guess = read_letter();
 
@@ -91,9 +90,9 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    print_game_state(arts, guesses, secret, guessed_letters, eliminated_letters);
+    print_game(arts, guesses, secret, guessed_letters, eliminated_letters);
 
-    if (all_letters_guessed(secret, guessed_letters)) {
+    if (all_guessed(secret, guessed_letters)) {
         printf("\nYou win! The secret phrase was: %s\n", secret);
         return 0;
     } else {
