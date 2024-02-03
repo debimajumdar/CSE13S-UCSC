@@ -21,17 +21,15 @@ int compare_characters(const void *a, const void *b) {
 
 void print_game_state(const char *arts[], int gallows_state, const char *secret,
     const char *guessed_letters, const char *eliminated_letters) {
-    printf("%s", CLEAR_SCREEN);
+
     printf("%s", arts[gallows_state]);
     printf("    Phrase: ");
 
     for (size_t i = 0; secret[i] != '\0'; ++i) {
         char current_char = secret[i];
         if (strchr(punctuation, current_char) != NULL
-            || string_contains_character(guessed_letters, current_char)) {
+            || string_contains_character(guessed_letters, current_char) || current_char == ' ') {
             printf("%c", current_char);
-        } else if (current_char == ' ') {
-            printf(" ");
         } else {
             printf("_");
         }
@@ -46,6 +44,7 @@ void print_game_state(const char *arts[], int gallows_state, const char *secret,
         temp_eliminated_letters, strlen(temp_eliminated_letters), sizeof(char), compare_characters);
     printf("Eliminated: %s\n", temp_eliminated_letters);
 }
+
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         fprintf(stderr, "wrong number of arguments\n");
