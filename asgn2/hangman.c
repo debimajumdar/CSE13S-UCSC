@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
             continue;
         } else {
             if (string_contains_character(guessed_letters, guess)) {
-                printf("Letter already guessed. Guess again.\n");
+                printf("");
                 continue;
             }
 
