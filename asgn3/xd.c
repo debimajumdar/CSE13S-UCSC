@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     //check if a filename is provided as a argument
     if (argc == 2) {
         //open file
-        file_descriptor = open(argv[1], O_READ);
+        file_descriptor = open(argv[1], O_RDONLY);
 
         if (file_descriptor == -1) {
             exit(1);
