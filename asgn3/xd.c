@@ -52,7 +52,6 @@ int main(int argc, char *argv[]) {
     // Open the file or use stdin if no filename provided!
     fd = (argc == 2) ? open(argv[1], O_RDONLY) : STDIN_FILENO;
     if (fd == -1) {
-        perror("Error opening file");
         exit(1);
     }
 
