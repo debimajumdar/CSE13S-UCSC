@@ -74,8 +74,7 @@ int main(int argc, char *argv[]) {
                 } else if (remaining_bytes == 0) { // EOF reached
                     break;
                 } else {
-                    perror("Error reading from stdin");
-                    exit(1);
+                    exit(0);
                 }
             }
 
