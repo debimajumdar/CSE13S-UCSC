@@ -1,3 +1,6 @@
+//xd.c
+//Author: Debi Majumdar
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,30 +8,30 @@
 
 #define BUFFER_SIZE 16
 
-void print_hex_ascii(unsigned char *buffer, size_t size) {
-    size_t i;
+void display_hex_ascii(unsigned char *data, size_t length) {
+    size_t index;
 
-    //print hex values
-    for (i = 0; i < size; ++i) {
-        printf("%02x", buffer[i]);
-        if (i % 2 != 0) {
+    // Print hex values
+    for (index = 0; index < length; ++index) {
+        printf("%02x", data[index]);
+        if (index % 2 != 0) {
             printf(" ");
         }
     }
 
-    //padding spaces
-    for (; i < BUFFER_SIZE; ++i) {
-        if (i % 2 != 0) {
+    // Padding spaces
+    for (; index < BUFFER_SIZE; ++index) {
+        if (index % 2 != 0) {
             printf(" ");
         }
         printf("  ");
     }
 
-    //ascii representation
+    // ASCII representation
     printf(" ");
-    for (i = 0; i < size; ++i) {
-        if (buffer[i] >= 32 && buffer[i] <= 126) {
-            printf("%c", buffer[i]);
+    for (index = 0; index < length; ++index) {
+        if (data[index] >= 32 && data[index] <= 126) {
+            printf("%c", data[index]);
         } else {
             printf(".");
         }
@@ -37,64 +40,63 @@ void print_hex_ascii(unsigned char *buffer, size_t size) {
 }
 
 int main(int argc, char *argv[]) {
-    int file_descriptor;
+    int fd;
 
-    //check if a filename is provided as a argument
+    // Check if a filename is provided as an argument
     if (argc == 2) {
-        //open file
-        file_descriptor = open(argv[1], O_RDONLY);
+        // Open the file
+        fd = open(argv[1], O_RDONLY);
 
-        if (file_descriptor == -1) {
+        if (fd == -1) {
             exit(1);
         }
     } else if (argc == 1) {
-        //use stdin if no filename provided
-        file_descriptor = STDIN_FILENO;
+        // Use stdin if no filename provided
+        fd = STDIN_FILENO;
     } else {
         exit(1);
     }
 
-    unsigned char buffer[BUFFER_SIZE];
-    ssize_t bytesRead; //change size_t to ssize_t for bytesRead
+    unsigned char buf[BUFFER_SIZE];
+    ssize_t bytes_read;
+    ssize_t current_byte = 0;
 
-    ssize_t curr_byte = 0;
+    while ((bytes_read = read(fd, buf, BUFFER_SIZE)) > 0) {
+        // Print the formatted output
 
-    while ((bytesRead = read(file_descriptor, buffer, BUFFER_SIZE)) > 0) {
-        //print the formatted output
-
-        if (file_descriptor == STDIN_FILENO) {
-            while (bytesRead < BUFFER_SIZE) {
-                ssize_t remainingBytes;
-                remainingBytes = read(
-                    file_descriptor, buffer + bytesRead, BUFFER_SIZE - (unsigned long) bytesRead);
-                if (remainingBytes > 0) {
-                    bytesRead += remainingBytes;
-                } else if (remainingBytes == 0) { //eof reached
+        if (fd == STDIN_FILENO) {
+            while (bytes_read < BUFFER_SIZE) {
+                ssize_t remaining_bytes;
+                remaining_bytes
+                    = read(fd, buf + bytes_read, BUFFER_SIZE - (unsigned long) bytes_read);
+                if (remaining_bytes > 0) {
+                    bytes_read += remaining_bytes;
+                } else if (remaining_bytes == 0) { // EOF reached
                     break;
                 } else {
                     exit(0);
                 }
             }
 
-            printf("%08lx: ", (unsigned long) curr_byte);
-            print_hex_ascii(buffer, (size_t) bytesRead);
-            curr_byte += bytesRead;
+            printf("%08lx: ", (unsigned long) current_byte);
+            display_hex_ascii(buf, (size_t) bytes_read);
+            current_byte += bytes_read;
         } else {
-            printf("%08lx: ", (unsigned long) curr_byte);
+            printf("%08lx: ", (unsigned long) current_byte);
 
-            print_hex_ascii(buffer, (size_t) bytesRead);
+            display_hex_ascii(buf, (size_t) bytes_read);
 
-            curr_byte += bytesRead;
+            current_byte += bytes_read;
 
-            if (bytesRead < BUFFER_SIZE) {
-                break; //exit loop if less than buffer size read, for throttled input
+            if (bytes_read < BUFFER_SIZE) {
+                break; // Exit loop if less than buffer size read, for throttled input
             }
         }
     }
 
-    //close the file if it was opened
-    if (file_descriptor != STDIN_FILENO) {
-        close(file_descriptor);
+    // Close the file if it was opened
+    if (fd != STDIN_FILENO) {
+        close(fd);
     }
 
     return 0;
