@@ -1,5 +1,5 @@
-//xd.c
-//Author: Debi Majumdar
+//File Name: xd.c
+//Author Name: Debi Majumdar
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -8,10 +8,11 @@
 
 #define BUFFER_SIZE 16
 
+// Function to display hexadecimal and ASCII representation of data
 void display_hex_ascii(unsigned char *data, size_t length) {
     size_t index;
 
-    // Print hex values
+    // Prining the hex values
     for (index = 0; index < length; ++index) {
         printf("%02x", data[index]);
         if (index % 2 != 0) {
@@ -19,7 +20,7 @@ void display_hex_ascii(unsigned char *data, size_t length) {
         }
     }
 
-    // Padding spaces
+    // Padding spaces here
     for (; index < BUFFER_SIZE; ++index) {
         if (index % 2 != 0) {
             printf(" ");
@@ -42,18 +43,16 @@ void display_hex_ascii(unsigned char *data, size_t length) {
 int main(int argc, char *argv[]) {
     int fd;
 
-    // Check if a filename is provided as an argument
-    if (argc == 2) {
-        // Open the file
-        fd = open(argv[1], O_RDONLY);
+    // Check if a filename is provided as an argument here
+    if (argc != 2 && argc != 1) {
+        fprintf(stderr, "Usage: %s [filename]\n", argv[0]);
+        exit(1);
+    }
 
-        if (fd == -1) {
-            exit(1);
-        }
-    } else if (argc == 1) {
-        // Use stdin if no filename provided
-        fd = STDIN_FILENO;
-    } else {
+    // Open the file or use stdin if no filename provided!
+    fd = (argc == 2) ? open(argv[1], O_RDONLY) : STDIN_FILENO;
+    if (fd == -1) {
+        perror("Error opening file");
         exit(1);
     }
 
@@ -61,8 +60,9 @@ int main(int argc, char *argv[]) {
     ssize_t bytes_read;
     ssize_t current_byte = 0;
 
+    // Read data from file and display hexadecimal and ASCII representation
     while ((bytes_read = read(fd, buf, BUFFER_SIZE)) > 0) {
-        // Print the formatted output
+        // Printing the formatted output
 
         if (fd == STDIN_FILENO) {
             while (bytes_read < BUFFER_SIZE) {
@@ -74,7 +74,8 @@ int main(int argc, char *argv[]) {
                 } else if (remaining_bytes == 0) { // EOF reached
                     break;
                 } else {
-                    exit(0);
+                    perror("Error reading from stdin");
+                    exit(1);
                 }
             }
 
@@ -89,7 +90,7 @@ int main(int argc, char *argv[]) {
             current_byte += bytes_read;
 
             if (bytes_read < BUFFER_SIZE) {
-                break; // Exit loop if less than buffer size read, for throttled input
+                break; // Exit loop if less than buffer size read, for throttle or whatever
             }
         }
     }
