@@ -9,14 +9,14 @@
 #include <stdio.h> // Standard I/O library
 
 int main(void) {
-// Opening file to write sine values 
-   //graphing sine
+    // Opening file to write sine values
+    //graphing sine
     FILE *Sine;
 
     Sine = fopen("sin.csv", "w");
 
     fprintf(Sine, "x, y\n");
-// Generating sine values and writing to file
+    // Generating sine values and writing to file
     for (double x = 0; x <= 2.0 * M_PI; x += 0.1) {
         double y = Sin(x) - sin(x);
 
@@ -49,7 +49,7 @@ int main(void) {
 
     for (double x = 0; x <= 2.0 * M_PI; x += 0.1) {
         double y = Tan(x) - tan(x);
-// Computing difference between custom and standard tangent functions
+        // Computing difference between custom and standard tangent functions
         fprintf(Sine, "%f, %.15f\n", x, y);
     }
 
