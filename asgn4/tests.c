@@ -1,53 +1,53 @@
-#include "mathlib.h"
+//Filename: tests.c
+//Author: Debi Majumdar
 
-#include <math.h>
-#include <stdio.h>
+// A program to compute and compare trigonometric functions and their corresponding standard library implementations
+
+#include "mathlib.h" // Header file containing custom math functions
+
+#include <math.h>    // Standard math library
+#include <stdio.h>   // Standard I/O library
 
 int main(void) {
-    //graphing sine
-    FILE *Sine;
+    // Opening file to write sine values
+    FILE *sinFile;
+    sinFile = fopen("sine.csv", "w");
+    fprintf(sinFile, "x, y\n");
 
-    Sine = fopen("sin.csv", "w");
-
-    fprintf(Sine, "x, y\n");
-
+    // Generating sine values and writing to file
     for (double x = 0; x <= 2.0 * M_PI; x += 0.1) {
-        double y = Sin(x) - sin(x);
-
-        fprintf(Sine, "%f, %.10f\n", x, y);
+        double y = MySin(x) - sin(x); // Computing difference between custom and standard sine functions
+        fprintf(sinFile, "%f, %.10f\n", x, y); // Writing values to file
     }
 
-    fclose(Sine);
+    fclose(sinFile); // Closing file after writing
 
-    //graphing cosine
-    FILE *Cosine;
+    // Opening file to write cosine values
+    FILE *cosFile;
+    cosFile = fopen("cosine.csv", "w");
+    fprintf(cosFile, "x, y\n");
 
-    Cosine = fopen("cos.csv", "w");
-
-    fprintf(Cosine, "x, y\n");
-
+    // Generating cosine values and writing to file
     for (double x = 0; x <= 2.0 * M_PI; x += 0.1) {
-        double y = Cos(x) - cos(x);
-
-        fprintf(Sine, "%f, %.10f\n", x, y);
+        double y = MyCos(x) - cos(x); // Computing difference between custom and standard cosine functions
+        fprintf(cosFile, "%f, %.10f\n", x, y); // Writing values to file
     }
 
-    fclose(Cosine);
+    fclose(cosFile); // Closing file after writing
 
-    //graping tangent
-    FILE *Tangent;
+    // Opening file to write tangent values
+    FILE *tanFile;
+    tanFile = fopen("tangent.csv", "w");
+    fprintf(tanFile, "x, y\n");
 
-    Tangent = fopen("tan.csv", "w");
-
-    fprintf(Tangent, "x, y\n");
-
+    // Generating tangent values and writing to file
     for (double x = 0; x <= 2.0 * M_PI; x += 0.1) {
-        double y = Tan(x) - tan(x);
-
-        fprintf(Sine, "%f, %.15f\n", x, y);
+        double y = MyTan(x) - tan(x); // Computing difference between custom and standard tangent functions
+        fprintf(tanFile, "%f, %.15f\n", x, y); // Writing values to file
     }
 
-    fclose(Tangent);
+    fclose(tanFile); // Closing file after writing
 
-    return 0;
+    return 0; // Exiting program
 }
+

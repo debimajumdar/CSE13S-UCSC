@@ -1,3 +1,6 @@
+//Filename: mathlib.c
+//Author: Debi Majumdar
+
 #include "mathlib.h"
 
 #include <math.h>
@@ -13,7 +16,7 @@ double Abs(double x) {
     return y;
 }
 
-//This function was given to us by Kerry Veenstra asgn3.pdf page 4
+//This function was given to us by Kerry Veenstra asgn4.pdf page 4
 double Sqrt(double x) {
     // Check domain.
     if (x < 0) {
@@ -86,4 +89,14 @@ double Cos(double x) {
 double Tan(double x) {
     double z = (Sin(x) / Cos(x));
     return z;
+}
+// A custom function to compute the absolute value of a number
+double MyAbs(double x) {
+    double y;
+    if (x > 0) {
+        y = x;
+    } else {
+        y = -x;
+    }
+    return y;
 }

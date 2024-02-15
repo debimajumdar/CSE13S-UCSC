@@ -1,3 +1,6 @@
+//Filename: operators.c
+//Author: Debi Majumdar
+
 #include "operators.h"
 
 #include "mathlib.h"
@@ -8,6 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+//Function given by Kerry Veenstra, asgn4.pdf page 5-6
 bool apply_binary_operator(binary_operator_fn op) {
     if (stack_size < 2) {
         return false;
@@ -25,7 +30,7 @@ bool apply_binary_operator(binary_operator_fn op) {
     }
 }
 
-//Function given by Kerry Veenstra, asgn3.pdf page 3
+
 bool apply_unary_operator(unary_operator_fn op) {
     if (stack_size < 1) {
         return false;
@@ -57,12 +62,12 @@ double operator_div(double lhs, double rhs) {
     return result;
 }
 
-double my_fmod(double lhs, double rhs) {
+double calculateRemainder(double lhs, double rhs) {
     double result = fmod(lhs, rhs);
     return result;
 }
 
-//This function is given to us by Kerry Veenstra asgn3.pdf page 6
+//This function is given to us by Kerry Veenstra asgn4.pdf page 6-7
 bool parse_double(const char *s, double *d) {
     char *endptr;
     double result = strtod(s, &endptr);

@@ -1,3 +1,6 @@
+//filename: stack.c
+//Author: Debi Majumdar
+
 #include "stack.h"
 
 #include "mathlib.h"
@@ -6,6 +9,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+
+//from Asgn4 pdf functions page 7-8 
 int top = -1;
 double stack[STACK_CAPACITY] = { 0 };
 int stack_size = 0;
@@ -47,7 +52,7 @@ void stack_clear(void) {
     top = -1;
 }
 
-//This function is given to us by Kerry Veenstra asgn3.pdf page 7
+//This function is given to us by Kerry Veenstra asgn4pdf page 7-8
 void stack_print(void) {
     // make sure we don't print stack[0] when it is empty
     if (stack_size == 0) {
