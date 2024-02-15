@@ -5,8 +5,8 @@
 
 #include "mathlib.h" // Header file containing custom math functions
 
-#include <math.h>    // Standard math library
-#include <stdio.h>   // Standard I/O library
+#include <math.h> // Standard math library
+#include <stdio.h> // Standard I/O library
 
 int main(void) {
     // Opening file to write sine values
@@ -16,7 +16,8 @@ int main(void) {
 
     // Generating sine values and writing to file
     for (double x = 0; x <= 2.0 * M_PI; x += 0.1) {
-        double y = MySin(x) - sin(x); // Computing difference between custom and standard sine functions
+        double y
+            = MySin(x) - sin(x); // Computing difference between custom and standard sine functions
         fprintf(sinFile, "%f, %.10f\n", x, y); // Writing values to file
     }
 
@@ -29,7 +30,8 @@ int main(void) {
 
     // Generating cosine values and writing to file
     for (double x = 0; x <= 2.0 * M_PI; x += 0.1) {
-        double y = MyCos(x) - cos(x); // Computing difference between custom and standard cosine functions
+        double y = MyCos(x)
+                   - cos(x); // Computing difference between custom and standard cosine functions
         fprintf(cosFile, "%f, %.10f\n", x, y); // Writing values to file
     }
 
@@ -42,7 +44,8 @@ int main(void) {
 
     // Generating tangent values and writing to file
     for (double x = 0; x <= 2.0 * M_PI; x += 0.1) {
-        double y = MyTan(x) - tan(x); // Computing difference between custom and standard tangent functions
+        double y = MyTan(x)
+                   - tan(x); // Computing difference between custom and standard tangent functions
         fprintf(tanFile, "%f, %.15f\n", x, y); // Writing values to file
     }
 
@@ -50,4 +53,3 @@ int main(void) {
 
     return 0; // Exiting program
 }
-

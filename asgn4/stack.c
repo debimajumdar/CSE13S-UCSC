@@ -9,8 +9,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-
-//from Asgn4 pdf functions page 7-8 
+//from Asgn4 pdf functions page 7-8
 int top = -1;
 double stack[STACK_CAPACITY] = { 0 };
 int stack_size = 0;

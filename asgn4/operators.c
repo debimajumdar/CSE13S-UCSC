@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 //Function given by Kerry Veenstra, asgn4.pdf page 5-6
 bool apply_binary_operator(binary_operator_fn op) {
     if (stack_size < 2) {
@@ -29,7 +28,6 @@ bool apply_binary_operator(binary_operator_fn op) {
         return true;
     }
 }
-
 
 bool apply_unary_operator(unary_operator_fn op) {
     if (stack_size < 1) {
