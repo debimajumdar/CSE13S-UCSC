@@ -3,7 +3,10 @@
 
 #include <stdbool.h>
 
-typedef int item;
+typedef struct item {
+	char key[255];
+	int id;
+} item;
 
 bool cmp(item *, item *);
 

@@ -46,4 +46,34 @@ item * list_find(LL *l, bool (*cmp)(item *,item *), item *i)
 	}
 	return NULL;
 }
+void list_destroy(LL **l) {
+    if (*l == NULL) {
+        return;
+    }
+    Node *current = (*l)->head;
+    while (current != NULL) {
+        Node *next = current->next;
+        free(current);
+        current = next;
+    }
+    free(*l);
+    *l = NULL;
+}
 
+void list_remove(LL *l, bool (*cmp)(item *, item *), item *i) {
+    Node *current = l->head;
+    Node *previous = NULL;
+    while (current != NULL) {
+        if (cmp(&current->data, i)) {
+            if (previous == NULL) {
+                l->head = current->next;
+            } else {
+                previous->next = current->next;
+            }
+            free(current);
+            return;
+        }
+        previous = current;
+        current = current->next;
+    }
+}

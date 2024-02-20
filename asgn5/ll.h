@@ -1,5 +1,4 @@
 #ifndef _LL
-
 #define _LL
 
 #include <stdbool.h>

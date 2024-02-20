@@ -3,12 +3,12 @@
 #define _HASH 
 
 #include "ll.h"
-
+#define NUM_BUCKETS 1000 // Number of buckets in the hash table
 typedef struct Hashtable Hashtable;
 
 struct Hashtable {
-	// your datastructure here; this is just a placeholder
-	int h;
+	 LL *buckets[NUM_BUCKETS];
+ // Array of linked lists for storing key-value pairs
 };
 
 Hashtable * hash_create(void);
