@@ -4,7 +4,7 @@ LFLAGS =
 EXEC = uniqcounter
 HEADERS = item.h ll.h hash.h dictwords.h
 
-all: bench1 bench2
+all: bench1 bench2 uniqq
 
 $(EXEC): main.o ll.o item.o
 	$(CC) $^ $(LFLAGS) -o $@
