@@ -15,6 +15,7 @@ typedef struct LL LL;
 struct LL {
 	Node *head;
 	Node *tail;
+//we are adding a tail pointer
 };
 
 LL * list_create(void);

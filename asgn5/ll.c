@@ -1,3 +1,6 @@
+//Author: Debi Majumdar
+//Filename: ll.c
+
 #include "ll.h"
 #include <stdbool.h>
 #include <stdlib.h>
@@ -8,7 +11,7 @@ LL *list_create() {
         return NULL;
     }
     l->head = NULL;
-    l->tail = NULL; // Initialize tail pointer to NULL
+    l->tail = NULL; //We are going to Initialize tail pointer to NULL
     return l;
 }
 
@@ -29,7 +32,7 @@ bool list_add(LL *l, item *i) {
     } else {
         l->tail->next = n;
     }
-    l->tail = n; // Update tail pointer
+    l->tail = n; // We will Update the tail pointer
     return true;
 }
 
