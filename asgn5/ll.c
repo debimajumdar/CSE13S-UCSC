@@ -1,58 +1,62 @@
 #include "ll.h"
 #include <stdbool.h>
 #include <stdlib.h>
-#include <stdio.h>
 
-LL * list_create()
-{
-	LL *l = (LL *)malloc(sizeof(LL));
-	if (l == NULL) {
-		return NULL;
-	}
-	l->head = NULL;
-	return l;
+LL *list_create() {
+    LL *l = (LL *)malloc(sizeof(LL));
+    if (l == NULL) {
+        return NULL;
+    }
+    l->head = NULL;
+    l->tail = NULL; // Initialize tail pointer to NULL
+    return l;
 }
 
-bool list_add(LL *l, item *i)
-{
-	Node *n = (Node *)malloc(sizeof(Node));
-	if (n == NULL) {
-		return false;
-	}
-	n->data = *i;
-	n->next = NULL;
-	if (l->head == NULL) {
-		l->head = n;
-		return true;
-	} else {
-		Node *tail = l->head;
-		while (tail->next != NULL) {
-			tail = tail->next;
-		}
-		tail->next = n;
-		return true;
-	}
+bool list_add(LL *l, item *i) {
+    if (l == NULL || i == NULL) {
+        return false;
+    }
+
+    Node *n = (Node *)malloc(sizeof(Node));
+    if (n == NULL) {
+        return false;
+    }
+    n->data = *i;
+    n->next = NULL;
+
+    if (l->head == NULL) {
+        l->head = n;
+    } else {
+        l->tail->next = n;
+    }
+    l->tail = n; // Update tail pointer
+    return true;
 }
 
+item *list_find(LL *l, bool (*cmp)(item *, item *), item *i) {
+    if (l == NULL || cmp == NULL || i == NULL) {
+        return NULL;
+    }
 
-item * list_find(LL *l, bool (*cmp)(item *,item *), item *i)
-{
-	Node *n = l->head;
-        while (n != NULL) {
-		if (cmp(&n->data, i)) {
-			return &n->data;
-		}
-		n = n->next;
-	}
-	return NULL;
+    Node *current = l->head;
+    while (current != NULL) {
+        if (cmp(&current->data, i)) {
+            return &current->data;
+        }
+        current = current->next;
+    }
+    return NULL;
 }
+
 void list_destroy(LL **l) {
-    if (*l == NULL) {
+    if (l == NULL || *l == NULL) {
         return;
     }
+
     Node *current = (*l)->head;
+    Node *next;
     while (current != NULL) {
-        Node *next = current->next;
+        next = current->next;
         free(current);
         current = next;
     }
@@ -61,19 +65,28 @@ void list_destroy(LL **l) {
 }
 
 void list_remove(LL *l, bool (*cmp)(item *, item *), item *i) {
+    if (l == NULL || cmp == NULL || i == NULL) {
+        return;
+    }
+
     Node *current = l->head;
-    Node *previous = NULL;
+    Node *prev = NULL;
+
     while (current != NULL) {
         if (cmp(&current->data, i)) {
-            if (previous == NULL) {
+            if (prev == NULL) {
                 l->head = current->next;
             } else {
-                previous->next = current->next;
+                prev->next = current->next;
+            }
+            if (current == l->tail) {
+                l->tail = prev;
             }
             free(current);
             return;
         }
-        previous = current;
+        prev = current;
         current = current->next;
     }
 }
+
