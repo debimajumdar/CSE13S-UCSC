@@ -21,6 +21,9 @@ bench1: dictwords_list.o abstractwords.o bench1.o ll.o item.o
 bench2: dictwords_hash.o abstractwords.o bench2.o hash.o ll.o item.o badhash.o
 	$(CC) $^ $(LFLAGS) -o $@
 
+uniqq: uniqq.o ll.o hash.o item.o
+	$(CC) $^ $(LFLAGS) -o $@
+
 clean:
 	rm -rf $(EXEC) *.o
 
