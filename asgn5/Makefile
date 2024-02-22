@@ -25,7 +25,7 @@ uniqq: uniqq.o ll.o hash.o item.o
 	$(CC) $^ $(LFLAGS) -o $@
 
 clean:
-	rm -rf $(EXEC) *.o uniqq
+	rm -rf $(EXEC) *.o bench1 bench2 uniqq
 
 format:
 	clang-format -i -style=file *.[ch]

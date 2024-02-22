@@ -5,9 +5,9 @@
 
 typedef struct item item;
 
-struct item  {
-	char key[255];
-	int id;
+struct item {
+    char key[255];
+    int id;
 };
 
 bool cmp(item *, item *);
