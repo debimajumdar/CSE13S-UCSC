@@ -2,6 +2,7 @@
 //Filename: hash.c
 
 #include "hash.h"
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -15,7 +16,7 @@ unsigned int hash_function(char *key) {
 }
 
 Hashtable *hash_create(void) {
-    Hashtable *ht = (Hashtable *)malloc(sizeof(Hashtable));
+    Hashtable *ht = (Hashtable *) malloc(sizeof(Hashtable));
     if (ht == NULL) {
         return NULL;
     }

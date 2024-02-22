@@ -1,30 +1,29 @@
 #ifndef _LL
 #define _LL
 
-#include <stdbool.h>
 #include "item.h"
+
+#include <stdbool.h>
 
 typedef struct Node Node;
 
 struct Node {
-	item data;
-	Node *next;
+    item data;
+    Node *next;
 };
 
 typedef struct LL LL;
 struct LL {
-	Node *head;
-	Node *tail;
-//we are adding a tail pointer
+    Node *head;
+    Node *tail;
+    //we are adding a tail pointer
 };
 
-LL * list_create(void);
+LL *list_create(void);
 bool list_add(LL *, item *);
-item * list_find(LL *, bool (*)(item *,item *), item *);
+item *list_find(LL *, bool (*)(item *, item *), item *);
 
 void list_destroy(LL **);
-void list_remove(LL *, bool (*)(item *,item *), item *);
+void list_remove(LL *, bool (*)(item *, item *), item *);
 
 #endif
-
-

@@ -2,11 +2,12 @@
 //Filename: ll.c
 
 #include "ll.h"
+
 #include <stdbool.h>
 #include <stdlib.h>
 
 LL *list_create() {
-    LL *l = (LL *)malloc(sizeof(LL));
+    LL *l = (LL *) malloc(sizeof(LL));
     if (l == NULL) {
         return NULL;
     }
@@ -20,7 +21,7 @@ bool list_add(LL *l, item *i) {
         return false;
     }
 
-    Node *n = (Node *)malloc(sizeof(Node));
+    Node *n = (Node *) malloc(sizeof(Node));
     if (n == NULL) {
         return false;
     }
@@ -92,4 +93,3 @@ void list_remove(LL *l, bool (*cmp)(item *, item *), item *i) {
         current = current->next;
     }
 }
-

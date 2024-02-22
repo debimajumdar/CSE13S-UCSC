@@ -1,4 +1,4 @@
 #include "hash.h"
 
-Hashtable * uniqwords(int);
-LL * getwords(void);
+Hashtable *uniqwords(int);
+LL *getwords(void);

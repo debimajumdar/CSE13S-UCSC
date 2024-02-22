@@ -1,11 +1,11 @@
 //Author: Debi Majumdar
 //Filename: uniqq.c
 
+#include "hash.h" // Include the hash table implementation
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "hash.h" // Include the hash table implementation
 
 #define MAX_LINE_LENGTH 1024 // Maximum length of input line
 
