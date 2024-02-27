@@ -1,5 +1,7 @@
 //Author: Debi Majumdar
-//Filename: tsp.c
+//Asgn6
+//Filename: Surfin USA
+
 
 #include "graph.h"
 #include "path.h"
@@ -13,15 +15,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-Path *solve_tsp(Graph *graph);
-
-int next_permutation(uint32_t *array, uint32_t length);
+// Function prototypes
+Path *calculate_shortest_path(Graph *graph);
+int calculate_next_permutation(uint32_t *array, uint32_t length);
 
 int main(int argc, char *argv[]) {
     int directed = 0;
     char *input_file = NULL;
     char *output_file = NULL;
 
+    // Go through command line options
     int opt;
     while ((opt = getopt(argc, argv, "dhi:o:")) != -1) {
         switch (opt) {
@@ -40,11 +43,12 @@ int main(int argc, char *argv[]) {
                    "afterwards.\n");
             return 0;
         default:
-            // read from stdin as a default
+            // Read from stdin as a default
             fprintf(stderr, "Invalid option\n");
             return 1;
         }
     }
+
     FILE *input;
     if (input_file == NULL) {
         input = stdin;
@@ -54,6 +58,7 @@ int main(int argc, char *argv[]) {
     if (input == NULL) {
         fprintf(stderr, "Failed to open the input file.\n");
         return 1;
+     return 1;
     }
 
     uint32_t num_vertices;
@@ -61,29 +66,32 @@ int main(int argc, char *argv[]) {
     Graph *graph = graph_create(num_vertices, directed);
 
     char vertex_name[100];
-    for (uint32_t i = 0; i < num_vertices; i++) {
-        // Use %[^\n] to read the entire line, including spaces.
+    uint32_t i = 0;
+    while (i < num_vertices) {
+        // Read vertex names and add them to the graph
         fscanf(input, " %[^\n]\n", vertex_name);
         graph_add_vertex(graph, vertex_name, i);
+        i++;
     }
 
     uint32_t num_edges;
     fscanf(input, "%" SCNu32, &num_edges);
-    for (uint32_t i = 0; i < num_edges; i++) {
+    uint32_t j = 0;
+    while (j < num_edges) {
+        // Read edge information and add edges to the graph
         uint32_t start, end, weight;
         fscanf(input, "%" SCNu32 " %" SCNu32 " %" SCNu32, &start, &end, &weight);
         graph_add_edge(graph, start, end, weight);
+        j++;
     }
 
-    //made it here
-
-    // Close the input file.
+    // Close the input file
     fclose(input);
 
-    // Solve the TSP problem using brute force.
-    Path *tsp_path = solve_tsp(graph);
+    // Solve the TSP problem please
+    Path *tsp_path = calculate_shortest_path(graph);
 
-    // Print the TSP solution.
+    // Print the TSP solution
     if (output_file != NULL) {
         FILE *output = fopen(output_file, "w");
         if (output != NULL) {
@@ -106,22 +114,24 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // Free memory.
+    // Free memory
     path_free(&tsp_path);
     graph_free(&graph);
 
     return 0;
 }
 
-void dfs_tsp(uint32_t current_vertex, Graph *graph, Path *current_path, Path *best_path) {
+void traverse_tsp(uint32_t current_vertex, Graph *graph, Path *current_path, Path *best_path) {
     graph_visit_vertex(graph, current_vertex);
 
     bool all_visited = true;
-    for (uint32_t i = 0; i < graph_vertices(graph); i++) {
+    uint32_t i = 0;
+    while (i < graph_vertices(graph)) {
         if (!graph_visited(graph, i)) {
             all_visited = false;
             break;
         }
+        i++;
     }
 
     if (all_visited) {
@@ -135,27 +145,28 @@ void dfs_tsp(uint32_t current_vertex, Graph *graph, Path *current_path, Path *be
         }
 
     } else {
-        for (uint32_t i = 0; i < graph_vertices(graph); i++) {
-            if (!graph_visited(graph, i) && graph_get_weight(graph, current_vertex, i) > 0) {
-                path_add(current_path, i, graph);
-                dfs_tsp(i, graph, current_path, best_path);
+        uint32_t j = 0;
+        while (j < graph_vertices(graph)) {
+            if (!graph_visited(graph, j) && graph_get_weight(graph, current_vertex, j) > 0) {
+                path_add(current_path, j, graph);
+                traverse_tsp(j, graph, current_path, best_path);
                 path_remove(current_path, graph);
             }
+            j++;
         }
     }
 
     graph_unvisit_vertex(graph, current_vertex);
 }
-
-Path *solve_tsp(Graph *graph) {
+Path *calculate_shortest_path(Graph *graph) {
     uint32_t num_vertices = graph_vertices(graph);
     Path *current_path = path_create(num_vertices + 1);
     Path *best_path = path_create(num_vertices + 1);
 
     // Start DFS from vertex 0
     path_add(current_path, 0, graph);
-    dfs_tsp(0, graph, current_path, best_path);
-    //best path has a distance of 0
+    traverse_tsp(0, graph, current_path, best_path);
+    // Best path has a distance of 0
     path_free(&current_path);
 
     return best_path;
