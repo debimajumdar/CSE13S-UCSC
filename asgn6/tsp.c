@@ -2,7 +2,6 @@
 //Asgn6
 //Filename: Surfin USA
 
-
 #include "graph.h"
 #include "path.h"
 #include "stack.h"
@@ -58,7 +57,7 @@ int main(int argc, char *argv[]) {
     if (input == NULL) {
         fprintf(stderr, "Failed to open the input file.\n");
         return 1;
-     return 1;
+        return 1;
     }
 
     uint32_t num_vertices;

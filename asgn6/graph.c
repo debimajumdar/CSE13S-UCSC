@@ -1,3 +1,6 @@
+//Author: Debi Majumdar
+//Filename: graph.c
+
 #include "graph.h"
 
 #include <stdio.h>
@@ -70,12 +73,12 @@ void graph_free(Graph **gp) {
         }
         free((*gp)->names);
         free((*gp)->weights);
-        
+
         // Free memory for the visited array and the graph itself
         free((*gp)->visited);
         free(*gp);
     }
-    
+
     // Set the graph pointer to NULL after freeing memory
     if (gp != NULL) {
         *gp = NULL;
@@ -93,7 +96,7 @@ void graph_add_vertex(Graph *g, const char *name, uint32_t v) {
     if (g->names[v]) {
         free(g->names[v]);
     }
-    
+
     // Allocate memory for the new vertex name and copy it
     g->names[v] = strdup(name);
 }
@@ -112,7 +115,7 @@ char **graph_get_names(const Graph *g) {
 void graph_add_edge(Graph *g, uint32_t start, uint32_t end, uint32_t weight) {
     // Set the weight of the edge between start and end vertices
     g->weights[start][end] = weight;
-    
+
     // If the graph is undirected, set the weight of the reverse edge
     if (!g->directed) {
         g->weights[end][start] = weight;
