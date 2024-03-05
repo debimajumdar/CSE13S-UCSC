@@ -1,7 +1,3 @@
-//Author: Debi Majumdar
-//Filename: huff.c
-//Asgn7
-
 #include "bitreader.h"
 #include "bitwriter.h"
 #include "node.h"
@@ -24,18 +20,20 @@ uint32_t fill_histogram(FILE *fin, uint32_t *histogram) {
     uint32_t filesize = 0;
 
     while (1) {
-        int byte = fgetc(fin);
-        if (byte == EOF) {
+        int b = fgetc(fin);
+        if (b == EOF) {
             break;
         }
 
-        histogram[byte]++;
+        histogram[b]++;
         filesize++;
     }
 
-    histogram[0x01]++;
-    histogram[0xfe]++;
+    // Ensure at least two values in the histogram array are non-zero
+    histogram[0x00]++;
+    histogram[0xff]++;
 
+    // Rewind the file
     fseek(fin, 0, SEEK_SET);
 
     return filesize;
@@ -83,12 +81,12 @@ void fill_code_table(Code *code_table, Node *node, uint64_t code, uint8_t code_l
 
 void huff_write_tree(BitWriter *outbuf, Node *node) {
     if (node->left == NULL) {
-        bit_write_bit(outbuf, 0);
+        bit_write_bit(outbuf, 1);
         bit_write_uint8(outbuf, node->symbol);
     } else {
         huff_write_tree(outbuf, node->left);
         huff_write_tree(outbuf, node->right);
-        bit_write_bit(outbuf, 1);
+        bit_write_bit(outbuf, 0);
     }
 }
 
@@ -102,13 +100,13 @@ void huff_compress_file(BitWriter *outbuf, FILE *fin, uint32_t filesize, uint16_
     huff_write_tree(outbuf, code_tree);
 
     while (1) {
-        int byte = fgetc(fin);
-        if (byte == EOF) {
+        int b = fgetc(fin);
+        if (b == EOF) {
             break;
         }
 
-        uint64_t code = code_table[byte].code;
-        uint8_t code_length = code_table[byte].code_length;
+        uint64_t code = code_table[b].code;
+        uint8_t code_length = code_table[b].code_length;
 
         for (uint8_t i = 0; i < code_length; ++i) {
             bit_write_bit(outbuf, (uint8_t) (code & 1));
@@ -150,8 +148,8 @@ int main(int argc, char *argv[]) {
     uint32_t filesize = fill_histogram(input_file, histogram);
     fclose(input_file);
 
-    histogram[0x01]++;
-    histogram[0xfe]++;
+    histogram[0x00]++;
+    histogram[0xff]++;
 
     uint16_t num_leaves = 0;
     Node *code_tree = create_tree(histogram, &num_leaves);
