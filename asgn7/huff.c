@@ -1,3 +1,7 @@
+//Author: Debi Majumdar
+//Filename: huff.c
+//Asgn7
+
 #include "bitreader.h"
 #include "bitwriter.h"
 #include "node.h"
@@ -13,18 +17,21 @@ typedef struct Code {
 } Code;
 
 uint32_t fill_histogram(FILE *fin, uint32_t *histogram) {
+    // Initialize all elements of the histogram array to 0
     for (int i = 0; i < 256; ++i) {
         histogram[i] = 0;
     }
 
     uint32_t filesize = 0;
 
+    // Read bytes from the input file until end of file
     while (1) {
         int b = fgetc(fin);
         if (b == EOF) {
             break;
         }
 
+        // Increment the histogram at index b by 1
         histogram[b]++;
         filesize++;
     }
@@ -42,6 +49,7 @@ uint32_t fill_histogram(FILE *fin, uint32_t *histogram) {
 Node *create_tree(uint32_t *histogram, uint16_t *num_leaves) {
     PriorityQueue *priority_queue = pq_create();
 
+    // Create priority queue from histogram
     for (uint16_t i = 0; i < 256; ++i) {
         if (histogram[i] > 0) {
             Node *new_node = node_create((uint8_t) i, histogram[i]);
@@ -50,6 +58,7 @@ Node *create_tree(uint32_t *histogram, uint16_t *num_leaves) {
         }
     }
 
+    // Construct Huffman tree from priority queue
     while (!pq_is_empty(priority_queue) && !pq_size_is_1(priority_queue)) {
         Node *left = dequeue(priority_queue);
         Node *right = dequeue(priority_queue);
@@ -70,9 +79,11 @@ Node *create_tree(uint32_t *histogram, uint16_t *num_leaves) {
 
 void fill_code_table(Code *code_table, Node *node, uint64_t code, uint8_t code_length) {
     if (node->left == NULL) {
+        // Assign code and code length for leaf nodes
         code_table[node->symbol].code = code;
         code_table[node->symbol].code_length = code_length;
     } else {
+        // Recursively fill code table for internal nodes
         fill_code_table(code_table, node->left, code, code_length + 1);
         code |= (uint64_t) 1 << code_length;
         fill_code_table(code_table, node->right, code, code_length + 1);
@@ -81,9 +92,11 @@ void fill_code_table(Code *code_table, Node *node, uint64_t code, uint8_t code_l
 
 void huff_write_tree(BitWriter *outbuf, Node *node) {
     if (node->left == NULL) {
+        // Write leaf node symbol
         bit_write_bit(outbuf, 1);
         bit_write_uint8(outbuf, node->symbol);
     } else {
+        // Write internal node marker and traverse recursively
         huff_write_tree(outbuf, node->left);
         huff_write_tree(outbuf, node->right);
         bit_write_bit(outbuf, 0);
@@ -92,19 +105,23 @@ void huff_write_tree(BitWriter *outbuf, Node *node) {
 
 void huff_compress_file(BitWriter *outbuf, FILE *fin, uint32_t filesize, uint16_t num_leaves,
     Node *code_tree, Code *code_table) {
+    // Write header information
     bit_write_uint8(outbuf, 'H');
     bit_write_uint8(outbuf, 'C');
     bit_write_uint32(outbuf, filesize);
     bit_write_uint16(outbuf, num_leaves);
 
+    // Write Huffman tree to output buffer
     huff_write_tree(outbuf, code_tree);
 
+    // Compress file using Huffman codes
     while (1) {
         int b = fgetc(fin);
         if (b == EOF) {
             break;
         }
 
+        // Write Huffman code for each byte
         uint64_t code = code_table[b].code;
         uint8_t code_length = code_table[b].code_length;
 
@@ -116,6 +133,7 @@ void huff_compress_file(BitWriter *outbuf, FILE *fin, uint32_t filesize, uint16_
 }
 
 int main(int argc, char *argv[]) {
+    // Process command line arguments
     char *input_filename = NULL;
     char *output_filename = NULL;
 
@@ -138,6 +156,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    // Open input file and calculate histogram
     FILE *input_file = fopen(input_filename, "rb");
     if (input_file == NULL) {
         perror("Error opening input file");
@@ -151,12 +170,14 @@ int main(int argc, char *argv[]) {
     histogram[0x00]++;
     histogram[0xff]++;
 
+    // Create Huffman tree and fill code table
     uint16_t num_leaves = 0;
     Node *code_tree = create_tree(histogram, &num_leaves);
 
     Code code_table[256];
     fill_code_table(code_table, code_tree, 0, 0);
 
+    // Compress input file and write to output file
     input_file = fopen(input_filename, "rb");
     if (input_file == NULL) {
         perror("Error rewinding input file");
@@ -174,6 +195,7 @@ int main(int argc, char *argv[]) {
     fclose(input_file);
     bit_write_close(&output_buffer);
 
+    // Free memory
     node_free(&code_tree);
 
     return 0;
