@@ -1,6 +1,6 @@
-// Author: Debi Majumdar
-// Asgn7
-// Filename: dehuff.c
+//Author: Debi Majumdar
+//Filename: dehuff.c
+//Asgn7
 
 #include "bitreader.h"
 #include "node.h"
@@ -15,14 +15,13 @@ typedef struct Code {
     uint8_t code_length;
 } Code;
 
-// Function to decompress the input file
 void dehuff_decompress_file(FILE *fout, BitReader *inbuf);
 
 int main(int argc, char *argv[]) {
     char *input_filename = NULL;
     char *output_filename = NULL;
 
-    // Parse command-line arguments
+    // Parse command line arguments
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-i") == 0 && i + 1 < argc) {
             input_filename = argv[i + 1];
@@ -31,9 +30,7 @@ int main(int argc, char *argv[]) {
             output_filename = argv[i + 1];
             i++;
         } else if (strcmp(argv[i], "-h") == 0) {
-            printf(
-                "Usage: dehuff -i infile -o outfile\n       dehuff -v -i infile -o outfile\n       "
-                "dehuff -h\n");
+            printf("Usage: dehuff -i infile -o outfile\n");
             return 0;
         }
     }
@@ -59,10 +56,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Decompress the input file
+    // Decompress the input file and write to output file
     dehuff_decompress_file(output_file, input_buffer);
 
-    // Close files and free memory
+    // Close files and release resources
     fclose(output_file);
     bit_read_close(&input_buffer);
 
@@ -71,24 +68,26 @@ int main(int argc, char *argv[]) {
 
 // Function to decompress the input file
 void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
-    // Read header information
     uint8_t type1 = bit_read_uint8(inbuf);
     uint8_t type2 = bit_read_uint8(inbuf);
     uint32_t filesize = bit_read_uint32(inbuf);
     uint16_t num_leaves = bit_read_uint16(inbuf);
 
-    // Check header validity
-    if (type1 != 'H' || type2 != 'C') {
-        fprintf(stderr, "Error: Invalid file header.\n");
-        exit(EXIT_FAILURE);
-    }
+    assert(type1 == 'H');
+    assert(type2 == 'C');
 
-    uint16_t num_nodes = 2 * num_leaves - 1;
+    // Calculate the number of internal nodes
+    uint16_t num_nodes = (uint16_t) (2 * num_leaves - 1);
 
     Node *stack[64];
     int top = -1;
 
-    // Reconstruct Huffman tree from serialized representation
+    // Initialize stack elements to NULL
+    for (int i = 0; i < 64; i++) {
+        stack[i] = NULL;
+    }
+
+    // Reconstruct the Huffman tree
     for (uint16_t i = 0; i < num_nodes; ++i) {
         while (top >= 0) {
             int bit = bit_read_bit(inbuf);
@@ -109,11 +108,10 @@ void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
 
     Node *code_tree = stack[top];
 
-    // Decompress the data using the Huffman tree
+    // Decompress the input data using the Huffman tree
     for (uint32_t i = 0; i < filesize; ++i) {
         Node *node = code_tree;
 
-        // Traverse the tree to find the symbol
         while (node->left != NULL && node->right != NULL) {
             int bit;
 
@@ -129,11 +127,9 @@ void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
             }
         }
 
-        // Write the symbol to the output file
         fwrite(&(node->symbol), sizeof(uint8_t), 1, fout);
     }
 
     // Free memory allocated for the Huffman tree
     node_free(&code_tree);
 }
-
