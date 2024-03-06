@@ -78,8 +78,10 @@ void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
     uint16_t num_leaves = bit_read_uint16(inbuf);
 
     // Check header validity
-    assert(type1 == 'H');
-    assert(type2 == 'C');
+    if (type1 != 'H' || type2 != 'C') {
+        fprintf(stderr, "Error: Invalid file header.\n");
+        exit(EXIT_FAILURE);
+    }
 
     uint16_t num_nodes = 2 * num_leaves - 1;
 
@@ -134,3 +136,4 @@ void dehuff_decompress_file(FILE *fout, BitReader *inbuf) {
     // Free memory allocated for the Huffman tree
     node_free(&code_tree);
 }
+
